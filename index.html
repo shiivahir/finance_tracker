@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="color-scheme" content="light dark">
+<title>Finance</title>
+<script>try{document.documentElement.dataset.theme=window.matchMedia&&matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light'}catch(e){}</script>
+<link rel="stylesheet" href="style.css">
+<script src="vendor/chart.umd.js"></script>
+<script src="app.js" defer></script>
+</head>
+<body>
+<div id="toast-container" aria-live="polite"></div>
+
+<header class="nav"><div class="nav-in">
+  <span class="brand">Finance</span>
+  <div class="nav-r"><span class="date" id="headerDate"></span>
+    <button class="icon-btn" id="themeBtn" aria-label="Toggle light or dark theme">◐</button></div>
+</div></header>
+
+<main class="wrap">
+  <h1 class="large">Overview</h1>
+
+  <section class="card hero" aria-label="Summary">
+    <div class="hero-main">
+      <div class="summary-label">Net balance</div>
+      <div class="summary-value big" id="netBalance"></div>
+      <div class="summary-badge" id="balanceStatus"></div>
+    </div>
+    <div class="stats">
+      <div class="stat"><div class="summary-label">Income</div><div class="summary-value green" id="totalCredit"></div><div class="summary-badge" id="creditCount"></div></div>
+      <div class="stat"><div class="summary-label">Spent</div><div class="summary-value red" id="totalDebit"></div><div class="summary-badge" id="debitCount"></div></div>
+      <div class="stat"><div class="summary-label">Savings rate</div><div class="summary-value blue" id="savingsRate"></div><div class="summary-badge" id="topCategory"></div></div>
+    </div>
+  </section>
+
+  <div class="grid">
+    <section class="card">
+      <h2 class="card-title" id="formTitle">Add transaction</h2>
+      <div class="seg" role="group" aria-label="Transaction type">
+        <button type="button" class="seg-btn active" data-type="debit" aria-pressed="true">Expense</button>
+        <button type="button" class="seg-btn" data-type="credit" aria-pressed="false">Income</button>
+      </div>
+      <form id="txForm">
+        <div class="form-row">
+          <div class="form-group"><label for="fAmt">Amount (₹)</label>
+            <input type="number" id="fAmt" placeholder="0.00" min="0.01" max="100000000000" step="0.01" required inputmode="decimal"></div>
+          <div class="form-group"><label for="fDate">Date</label><input type="date" id="fDate" required></div>
+        </div>
+        <div class="form-group"><label for="fCat">Category</label><select id="fCat"></select></div>
+        <div class="form-group"><label for="fDesc">Note</label><input type="text" id="fDesc" placeholder="Optional" maxlength="80"></div>
+        <button class="btn btn-debit" id="fSubmit" type="submit">Add expense</button>
+        <button class="btn btn-ghost" id="fCancel" type="button" hidden>Cancel</button>
+      </form>
+    </section>
+
+    <section class="card">
+      <h2 class="card-title">Balance</h2>
+      <div class="balance-display">
+        <div class="balance-ring" id="balanceRing" role="img" aria-label="Balance"><div class="balance-inner">
+          <div class="balance-emoji" id="balanceEmoji">😐</div><div class="balance-val" id="balanceVal"></div></div></div>
+        <div class="balance-label" id="balanceTip"></div>
+      </div>
+    </section>
+
+    <section class="card"><h2 class="card-title">Insights</h2><ul class="insights" id="insights"></ul></section>
+    <section class="card"><h2 class="card-title">Monthly budgets</h2><div id="budgets"></div></section>
+
+    <section class="card wide">
+      <h2 class="card-title">Activity</h2>
+      <div class="toolbar">
+        <select id="range" aria-label="Date range"><option value="all">All time</option><option value="month">This month</option><option value="last">Last month</option><option value="custom">Custom…</option></select>
+        <span id="custom" hidden><input type="date" id="rFrom" aria-label="From"><input type="date" id="rTo" aria-label="To"></span>
+        <input type="search" id="q" placeholder="Search" aria-label="Search">
+        <select id="sort" aria-label="Sort"><option value="new">Newest</option><option value="old">Oldest</option><option value="high">Amount ↓</option><option value="low">Amount ↑</option></select>
+      </div>
+      <div class="pills" id="typeFilter">
+        <button class="filter-btn active" data-t="all">All</button><button class="filter-btn" data-t="credit">Income</button><button class="filter-btn" data-t="debit">Expense</button>
+      </div>
+      <div class="history-list" id="history"></div>
+    </section>
+
+    <section class="card wide">
+      <h2 class="card-title">Charts</h2>
+      <div class="pills" id="chartTabs">
+        <button class="filter-btn active" data-c="bar">Bar</button><button class="filter-btn" data-c="doughnut">Doughnut</button><button class="filter-btn" data-c="line">6-month trend</button>
+      </div>
+      <div class="empty-state" id="chartEmpty" hidden>Nothing to chart for this range</div>
+      <canvas id="chart" height="110" aria-label="Spending by category" role="img"></canvas>
+    </section>
+
+    <section class="card wide">
+      <h2 class="card-title">Data</h2>
+      <div class="pills">
+        <button class="filter-btn" id="expJson">Backup JSON</button><button class="filter-btn" id="expCsv">Export CSV</button>
+        <button class="filter-btn" id="impBtn">Restore JSON</button>
+        
+       
+ <button class="filter-btn" id="seedBtn">Load demo data</button>
+        
+        
+        <button class="filter-btn danger" id="clearBtn">Clear all</button>
+        <input type="file" id="impFile" accept="application/json" hidden>
+      </div>
+    </section>
+  </div>
+</main>
+
+
+</body>
+</html>
